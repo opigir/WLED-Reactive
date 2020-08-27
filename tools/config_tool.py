@@ -33,11 +33,25 @@ class WLEDClient:
         self.getState()
 
     def getPresets(self):
+        p = 0
         self.getState()
         for i in range(0,16):
             self.loadPreset(i + 1)
-            self.currentPresets[i] = self.getState()
+            psNext = i + 2
+            psCurrent = self.currentState['ps']
+            if psNext - psCurrent == 1:
+                self.currentPresets[p] = self.getState()
+                p += 1
+            else:
+                self.getState()
         return self.currentPresets
+
+    def emptyPresets(self):
+        noPreset = self.currentPresets.count(None)
+        if noPreset != 0:
+            while noPreset > 0:
+                self.currentPresets.pop()
+                noPreset -= 1
 
     def postPreset(self, presetID, state):
         self.loadPreset(presetID)
@@ -63,6 +77,7 @@ def main(args):
     elif args.action == "save_presets":
         with open(args.file, "w") as presetsFile:
             wledClient.getPresets()
+            wledClient.emptyPresets()
             json.dump(wledClient.currentPresets, presetsFile)
         print(wledClient.currentPresets)
     elif args.action == "restore_presets":
@@ -73,7 +88,7 @@ def main(args):
                 wledClient.postPreset(i + 1, newPresets[i])
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Save and Restore Current State for WLED Devices")
+    parser = argparse.ArgumentParser(description="Save and Restore Current State/Presets for WLED Devices")
     parser.add_argument("action", default="save",
                         help="Action to take", choices=["save","restore","save_presets","restore_presets"])
     parser.add_argument("wled_host",
