@@ -60,6 +60,8 @@ body {
 				-ms-user-select: none;
 						user-select: none;
 	-webkit-tap-highlight-color: transparent;
+  scrollbar-width: 6px;
+  scrollbar-color: var(--c-sb) transparent;
 }
 
 html,
@@ -490,26 +492,6 @@ input[type=range]::-moz-range-thumb {
 	border-radius: 17px;
 	background: var(--c-f);
 	transform: translateY(7px);
-}
-input[type=range]::-ms-track {
-	width: 100%;
-	height: 30px;
-	background: transparent;
-	border-color: transparent;
-	color: transparent;
-}
-input[type=range]::-ms-fill-lower {
-	background: transparent;
-}
-input[type=range]::-ms-fill-upper {
-	background: transparent;
-}
-input[type=range]::-ms-thumb {
-	height: 16px;
-	width: 16px;
-	border-radius: 16px;
-	background: var(--c-f);
-	margin-top: -12px;
 }
 
 #wwrap {
@@ -1151,7 +1133,7 @@ var d = document;
 const ranges = RangeTouch.setup('input[type="range"]', {});
 var lastinfo = {};
 var cfg = {
-	theme:{base:"dark", bg:{url:""}, alpha:{bg:0.6,tab:0.6}, color:{bg:""}},
+	theme:{base:"dark", bg:{url:""}, alpha:{bg:0.6,tab:0.8}, color:{bg:""}},
 	comp :{colors:{picker: true, rgb: false, quick: true, hex: false}, labels:true, pcmbot:false}
 };
 
@@ -1384,7 +1366,7 @@ function populateInfo(i)
 	}
 	var vcn = "Kuuhaku";
 	if (i.ver.startsWith("0.10.")) vcn = "Namigai";
-	if (i.ver.startsWith("0.11.")) vcn = "Akatsuki";
+	if (i.ver.startsWith("0.10.2")) vcn = "Fumikiri";
 	if (i.cn) vcn = i.cn;
 
 	cn += `v${i.ver} "${vcn}"<br><br><table class="infot">
@@ -1457,6 +1439,11 @@ function populateSegments(s)
 				<label class="check revchkl">
 					Reverse direction
 					<input type="checkbox" id="seg${i}rev" onchange="setRev(${i})" ${inst.rev ? "checked":""}>
+					<span class="checkmark schk"></span>
+				</label>
+				<label class="check revchkl">
+					Mirror effect
+					<input type="checkbox" id="seg${i}mi" onchange="setMi(${i})" ${inst.mi ? "checked":""}>
 					<span class="checkmark schk"></span>
 				</label>
 			</div>
@@ -1826,6 +1813,12 @@ function setRev(s){
 	requestJson(obj, false);
 }
 
+function setMi(s){
+	var mi = d.getElementById(`seg${s}mi`).checked;
+	var obj = {"seg": {"id": s, "mi": mi}};
+	requestJson(obj, false);
+}
+
 function setSegPwr(s){
 	var obj = {"seg": {"id": s, "on": !powered[s]}};
 	requestJson(obj);
@@ -2030,7 +2023,7 @@ d.getElementById('heart').style.color = `hsl(${hc}, 100%, 50%)`}, 910);
 
 function openGH()
 {
-	window.open("https://github.com/Aircoookie/WLED/wiki");
+	window.open("https://github.com/atuline/WLED/wiki");
 }
 
 var cnfr = false;

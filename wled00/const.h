@@ -57,6 +57,7 @@
 #define REALTIME_MODE_ADALIGHT    5
 #define REALTIME_MODE_ARTNET      6
 #define REALTIME_MODE_TPM2NET     7
+#define REALTIME_MODE_DDP         8
 
 //realtime override modes
 #define REALTIME_OVERRIDE_NONE    0
@@ -101,6 +102,7 @@
 #define SEG_OPTION_ON             2
 #define SEG_OPTION_MIRROR         3            //Indicates that the effect will be mirrored within the segment
 #define SEG_OPTION_NONUNITY       4            //Indicates that the effect does not use FRAMETIME or needs getPixelColor
+#define SEG_OPTION_FREEZE         5            //Segment contents will not be refreshed
 #define SEG_OPTION_TRANSITIONAL   7
 
 //Timer mode types
@@ -129,5 +131,14 @@
 #define E131_MAX_UNIVERSE_COUNT 9
 
 #define ABL_MILLIAMPS_DEFAULT 850; // auto lower brightness to stay close to milliampere limit
+
+#define TOUCH_THRESHOLD 32 // limit to recognize a touch, higher value means more sensitive
+
+// Size of buffer for API JSON object (increase for more segments)
+#ifdef ESP8266
+  #define JSON_BUFFER_SIZE 9216
+#else
+  #define JSON_BUFFER_SIZE 16384
+#endif
 
 #endif
